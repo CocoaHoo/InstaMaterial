@@ -28,6 +28,7 @@
         android:layout_below="@+id/toolbar"/>
 
     <ImageButton
+        android:id="@+id/btnCreate"
         android:layout_width="@dimen/btn_fab_size"
         android:layout_height="@dimen/btn_fab_size"
         android:layout_alignParentBottom="true"
