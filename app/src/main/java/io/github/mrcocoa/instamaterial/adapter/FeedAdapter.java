@@ -18,12 +18,14 @@ import io.github.mrcocoa.instamaterial.widget.SquaredImageView;
  * Created by cocoa on 15/7/28.
  * Email:cocoahoo@gmail.com
  **/
-public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
     private static final int ANIMATED_ITEMS_COUNT = 2;
 
     private Context mContext;
     private int itemsCount = 0;
     private int lastAnimatedPosition = -1;
+
+    private OnFeedItemClickListener onFeedItemClickListener;
 
     public FeedAdapter(Context context) {
         this.mContext = context;
@@ -46,6 +48,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.ivFeedCenter.setImageResource(R.drawable.img_feed_center_2);
             holder.ivFeedBottom.setImageResource(R.drawable.img_feed_bottom_2);
         }
+
+        holder.ivFeedBottom.setOnClickListener(this);
+        holder.ivFeedBottom.setTag(position);
     }
 
     private void runEnterAnimation(View view, int position) {
@@ -69,6 +74,15 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return itemsCount;
     }
 
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.ivFeedBottom) {
+            if (onFeedItemClickListener != null) {
+                onFeedItemClickListener.onCommentsClick(view, (Integer) view.getTag());
+            }
+        }
+    }
+
     public static class CellFeedViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.ivFeedCenter)
         SquaredImageView ivFeedCenter;
@@ -84,5 +98,13 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void updateItems() {
         itemsCount = 30;
         notifyDataSetChanged();
+    }
+
+    public void setOnFeedItemClickListener(OnFeedItemClickListener onFeedItemClickListener) {
+        this.onFeedItemClickListener = onFeedItemClickListener;
+    }
+
+    public interface OnFeedItemClickListener {
+        void onCommentsClick(View v, int position);
     }
 }
